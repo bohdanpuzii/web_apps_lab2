@@ -31,3 +31,9 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         comment = Comment.objects.create(content=validated_data.get('content'), creator=user,
                                          related_post=validated_data.get('related_post'))
         return comment
+
+
+class CommentRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'

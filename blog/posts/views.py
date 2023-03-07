@@ -1,9 +1,9 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, RetrieveAPIView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, Comment
-from .serializers import PostListSerializer, PostCreateSerializer, CommentCreateSerializer
+from .serializers import PostListSerializer, PostCreateSerializer, CommentCreateSerializer, CommentRetrieveSerializer
 from .permissions import IsOwnerOrSuperuser, IsOwnerOrSuperuserOrPostOwner
 
 
@@ -34,3 +34,9 @@ class CommentCreateView(CreateAPIView):
 class CommentDeleteView(DestroyAPIView):
     queryset = Comment.objects.all()
     permission_classes = (IsOwnerOrSuperuserOrPostOwner, )
+
+
+class CommentRetrieveView(RetrieveAPIView):
+    serializer_class = CommentRetrieveSerializer
+    queryset = Comment.objects.all()
+
