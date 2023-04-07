@@ -10,7 +10,7 @@ from djangochannelsrestframework.mixins import (
 )
 
 from .models import Post, Comment, User
-from .consumer_serializers import PostSerializer, CommentSerializer, PostListSerializer
+from .consumer_serializers import PostSerializer, CommentSerializer, PostListSerializer, CommentRetrieveSerializer
 from .consumer_permissions import PostPermissions, CommentPermissions, is_user_logged_in
 
 
@@ -62,6 +62,11 @@ class CommentConsumer(ActivityStatusConsumer, GenericAsyncAPIConsumer, RetrieveM
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
     permission_classes = (CommentPermissions, )
+
+    def get_serializer_class(self, **kwargs):
+        if kwargs.get('action') == 'retrieve':
+            return CommentRetrieveSerializer
+        return CommentSerializer
 
     def perform_create(self, serializer, **kwargs):
         post = get_object_or_404(Post, pk=serializer.data.get('related_post'))

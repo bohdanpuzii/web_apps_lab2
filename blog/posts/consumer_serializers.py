@@ -5,8 +5,6 @@ from .models import Post, Comment
 class PostListSerializer(serializers.ModelSerializer):
     title = serializers.CharField(max_length=256)
     content = serializers.CharField(max_length=256)
-    #comments = serializers.IntegerField(required=False)
-    #author = serializers.IntegerField(required=False)
 
     class Meta:
         model = Post
@@ -27,6 +25,15 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     content = serializers.CharField(max_length=256)
     creator = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'created_at', 'creator', 'content', 'related_post')
+
+
+class CommentRetrieveSerializer(serializers.ModelSerializer):
+    content = serializers.CharField(max_length=256)
+    #creator = serializers.IntegerField(required=False)
 
     class Meta:
         model = Comment
