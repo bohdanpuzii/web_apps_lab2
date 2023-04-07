@@ -2,6 +2,17 @@ from rest_framework import serializers
 from .models import Post, Comment
 
 
+class PostListSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=256)
+    content = serializers.CharField(max_length=256)
+    #comments = serializers.IntegerField(required=False)
+    #author = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Post
+        fields = ('id', 'created_at', 'title', 'content', 'comments', 'author')
+
+
 class PostSerializer(serializers.ModelSerializer):
     title = serializers.CharField(max_length=256)
     content = serializers.CharField(max_length=256)

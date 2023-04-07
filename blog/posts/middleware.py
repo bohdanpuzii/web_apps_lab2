@@ -41,6 +41,9 @@ class TokenAuthMiddleware(BaseMiddleware):
         except ValueError:
             jwt_key = None
         scope['user'] = await get_user(jwt_key)
+        #print(scope)
+        #print(receive)
+        #print(send)
         return await super().__call__(scope, receive, send)
 
 

@@ -10,7 +10,7 @@ from djangochannelsrestframework.mixins import (
 )
 
 from .models import Post, Comment, User
-from .consumer_serializers import PostSerializer, CommentSerializer
+from .consumer_serializers import PostSerializer, CommentSerializer, PostListSerializer
 from .consumer_permissions import PostPermissions, CommentPermissions, is_user_logged_in
 
 
@@ -37,10 +37,13 @@ class ActivityStatusConsumer:
 
 
 class PostConsumer(ActivityStatusConsumer, GenericAsyncAPIConsumer, ListModelMixin, DeleteModelMixin, CreateModelMixin):
-    serializer_class = PostSerializer
     queryset = Post.objects.all()
     permission_classes = (PostPermissions, )
-    lookup_field = 'pk'
+
+    def get_serializer_class(self, **kwargs):
+        if kwargs.get('action') == 'list':
+            return PostListSerializer
+        return PostSerializer
 
     def get_queryset(self, **kwargs):
         if kwargs.get('action') == 'list':
