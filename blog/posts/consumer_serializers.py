@@ -12,9 +12,11 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'created_at', 'title', 'content', 'comments', 'author')
 
-    # def create(self, validated_data):
-    #     print(self.__slots__)
-    #     user = self.scope['user']
-    #     post = Post.objects.create(title=validated_data.get('title'), content=validated_data.get('content'), author=user)
-    #     return post
 
+class CommentSerializer(serializers.ModelSerializer):
+    content = serializers.CharField(max_length=256)
+    creator = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'created_at', 'creator', 'content', 'related_post')

@@ -2,15 +2,16 @@ import os
 import jwt
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blog.settings')
-
-from datetime import datetime
-from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 from channels.middleware import BaseMiddleware
-from django.contrib.auth.models import User
 from django.db import close_old_connections
+from django.conf import settings
+
+from .models import User
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blog.settings')
+
 
 django.setup()
 
@@ -28,7 +29,6 @@ def get_user(token):
         user = User.objects.get(id=payload['user_id'])
     except User.DoesNotExist:
         return AnonymousUser()
-    print(user.username)
     return user
 
 
@@ -46,3 +46,4 @@ class TokenAuthMiddleware(BaseMiddleware):
 
 def JwtAuthMiddlewareStack(inner):
     return TokenAuthMiddleware(inner)
+

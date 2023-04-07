@@ -1,8 +1,7 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, RetrieveAPIView
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, Comment
+from .models import Post, Comment, User
 from .serializers import PostListSerializer, PostCreateSerializer, CommentCreateSerializer, CommentRetrieveSerializer
 from .permissions import IsOwnerOrSuperuser, IsOwnerOrSuperuserOrPostOwner
 

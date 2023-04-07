@@ -1,7 +1,10 @@
 from djangochannelsrestframework.permissions import BasePermission
 from django.contrib.auth.models import AnonymousUser
-from asgiref.sync import sync_to_async
-from .models import Post
+from .models import Post, Comment
+
+
+def is_user_logged_in(user):
+    return not isinstance(user, AnonymousUser)
 
 
 class PostPermissions(BasePermission):
@@ -13,5 +16,19 @@ class PostPermissions(BasePermission):
                 return True
         except AttributeError:
             return True
-        if action == 'create' and not isinstance(scope['user'], AnonymousUser):
+        if action == 'create' and is_user_logged_in(scope['user']):
+            return True
+
+
+class CommentPermissions(BasePermission):
+    def has_permission(self, scope, consumer, action, **kwargs):
+        if action == 'retrieve':
+            return True
+        try:
+            if action == 'delete' and Comment.objects.filter(pk=kwargs.get('pk')).first().creator == scope['user'] \
+                    or scope['user'].is_superuser:
+                return True
+        except AttributeError:
+            return True
+        if action == 'create' and is_user_logged_in(scope['user']):
             return True
