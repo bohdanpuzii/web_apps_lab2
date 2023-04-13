@@ -17,13 +17,13 @@ from .consumer_permissions import PostPermissions, CommentPermissions, is_user_l
 @database_sync_to_async
 def update_user_incr(user):
     if is_user_logged_in(user):
-        User.objects.filter(pk=user.pk).update(status=F('status') + 1)
+        User.objects.filter(pk=user.pk).update(status=True)
 
 
 @database_sync_to_async
 def update_user_decr(user):
     if is_user_logged_in(user):
-        User.objects.filter(pk=user.pk).update(status=F('status') - 1)
+        User.objects.filter(pk=user.pk).update(status=False)
 
 
 class ActivityStatusConsumer:
